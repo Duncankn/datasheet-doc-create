@@ -13,7 +13,7 @@ import { Document,
   TextRun, 
   PageNumber } from 'docx';
 import { saveAs } from "file-saver"
-import { useState, createRef } from "react";
+import { useState, createRef, useEffect } from "react";
 
 const DatasheetTemplate = (props) => {
     const colorTemperature = props.data["Correlated Colour Temperature (CCT) in K"];
@@ -342,31 +342,37 @@ const DatasheetTemplate = (props) => {
           code = '9';
       }
       console.log(code);
-
-      if (typeof colorTemperature === 'string') {
+      code += colorTemperature/100;
+      console.log("number: "+ code);
+      /* if (typeof colorTemperature === 'string') {
           const temps = colorTemperature.replace(/\//g, ',').split(',');
           let index = 0;
-          temps.forEach((temp) => {
-              index++;
+          temps.forEach((temp) => {       
               code += temp.replace(/\D+/g, '').substr(0, 2);
-              if (index === 1) {
+              if (index === 1 && temp !== "") {
                   if (ra >= 80 && ra < 90) {
                       code += '8';
                   } else if (ra >= 90) {
                       code += '9';
                   }
               }
+              index++;
           });
-          console.log(code);
+          console.log("string: "+ code);
       } else {
           code += colorTemperature/100;
-          console.log(code);
-      }
+          console.log("number: "+ code);
+      } */
 
       setProductCode(code);
       productCodeRef.current = code
       console.log(productCode);
     };
+
+    useEffect(() => {
+        colourTempCode();
+      }, [ra, colorTemperature]);
+
 
     const productInfo = new Paragraph({
       children: [
@@ -458,7 +464,7 @@ const DatasheetTemplate = (props) => {
                 new Paragraph ({
                   children: [
                     new TextRun({
-                      text: props.data["Customer Model No.                (NEW ErP)"]+"+"+productCodeRef.current+"+"+props.data["Fitting Color"],
+                      text: props.data["Customer Model No.                (NEW ErP)"]+"+"+productCode+"+"+props.data["Fitting Color"],
                       size: contentFontSize,
                       font: contentFont,
                     }),
@@ -568,7 +574,7 @@ const DatasheetTemplate = (props) => {
                 new Paragraph ({
                   children: [
                     new TextRun({
-                      text: props.data["Rated Voltage       (V)"],
+                      text: props.data["Rated Voltage       (V)"]+"",
                       size: contentFontSize,
                       font: contentFont,
                     }),
@@ -612,7 +618,7 @@ const DatasheetTemplate = (props) => {
                 new Paragraph ({
                   children: [
                     new TextRun({
-                      text: props.data["Frequency(Hz)"],
+                      text: props.data["Frequency(Hz)"]+"",
                       size: contentFontSize,
                       font: contentFont,
                     }),
@@ -656,7 +662,7 @@ const DatasheetTemplate = (props) => {
                 new Paragraph ({
                   children: [
                     new TextRun({
-                      text: props.data["Input Current     (mA)"],
+                      text: props.data["Input Current     (mA)"]+"",
                       size: contentFontSize,
                       font: contentFont,
                     }),
@@ -700,7 +706,7 @@ const DatasheetTemplate = (props) => {
                 new Paragraph ({
                   children: [
                     new TextRun({
-                      text: props.data["On-mode power  (Pon)  （W）"],
+                      text: props.data["On-mode power  (Pon)  （W）"]+"",
                       size: contentFontSize,
                       font: contentFont,
                     }),
@@ -744,7 +750,7 @@ const DatasheetTemplate = (props) => {
                 new Paragraph ({
                   children: [
                     new TextRun({
-                      text: props.data["Power factor"],
+                      text: props.data["Power factor"]+"",
                       size: contentFontSize,
                       font: contentFont,
                     }),
@@ -788,7 +794,7 @@ const DatasheetTemplate = (props) => {
                 new Paragraph ({
                   children: [
                     new TextRun({
-                      text: props.data["THD"],
+                      text: props.data["THD"]+"",
                       size: contentFontSize,
                       font: contentFont,
                     }),
@@ -832,7 +838,7 @@ const DatasheetTemplate = (props) => {
                 new Paragraph ({
                   children: [
                     new TextRun({
-                      text: props.data["Surge Voltage(L-N)  [V]"],
+                      text: props.data["Surge Voltage(L-N)  [V]"]+"",
                       size: contentFontSize,
                       font: contentFont,
                     }),
@@ -876,7 +882,7 @@ const DatasheetTemplate = (props) => {
                 new Paragraph ({
                   children: [
                     new TextRun({
-                      text: props.data["Inrush current Ipeak    (A) "],
+                      text: props.data["Inrush current Ipeak    (A) "]+"",
                       size: contentFontSize,
                       font: contentFont,
                     }),
@@ -920,7 +926,7 @@ const DatasheetTemplate = (props) => {
                 new Paragraph ({
                   children: [
                     new TextRun({
-                      text: props.data["Inrush current Twidth (uS) "],
+                      text: props.data["Inrush current Twidth (uS) "]+"",
                       size: contentFontSize,
                       font: contentFont,
                     }),
@@ -1052,7 +1058,7 @@ const DatasheetTemplate = (props) => {
                 new Paragraph ({
                   children: [
                     new TextRun({
-                      text: props.data["Total luminous flux              (lm)"],
+                      text: props.data["Total luminous flux              (lm)"]+"",
                       size: contentFontSize,
                       font: contentFont,
                     }),
@@ -1096,7 +1102,7 @@ const DatasheetTemplate = (props) => {
                 new Paragraph ({
                   children: [
                     new TextRun({
-                      text: props.data["Total mains efficacy ηΤM (lm/W)"],
+                      text: props.data["Total mains efficacy ηΤM (lm/W)"]+"",
                       size: contentFontSize,
                       font: contentFont,
                     }),
@@ -1140,7 +1146,7 @@ const DatasheetTemplate = (props) => {
                 new Paragraph ({
                   children: [
                     new TextRun({
-                      text: props.data["Correlated Colour Temperature (CCT) in K"],
+                      text: props.data["Correlated Colour Temperature (CCT) in K"]+"",
                       size: contentFontSize,
                       font: contentFont,
                     }),
@@ -1228,7 +1234,7 @@ const DatasheetTemplate = (props) => {
                 new Paragraph ({
                   children: [
                     new TextRun({
-                      text: props.data["Beam angle    (°)"],
+                      text: props.data["Beam angle    (°)"]+"",
                       size: contentFontSize,
                       font: contentFont,
                     }),
@@ -1272,7 +1278,7 @@ const DatasheetTemplate = (props) => {
                 new Paragraph ({
                   children: [
                     new TextRun({
-                      text: props.data["UGR          (if Applicable) "],
+                      text: props.data["UGR          (if Applicable) "]+"",
                       size: contentFontSize,
                       font: contentFont,
                     }),
@@ -1360,7 +1366,7 @@ const DatasheetTemplate = (props) => {
                 new Paragraph ({
                   children: [
                     new TextRun({
-                      text: props.data["Maximum intensity  (cd)"],
+                      text: props.data["Maximum intensity  (cd)"]+"",
                       size: contentFontSize,
                       font: contentFont,
                     }),
@@ -1404,7 +1410,7 @@ const DatasheetTemplate = (props) => {
                 new Paragraph ({
                   children: [
                     new TextRun({
-                      text: props.data["Flickering                   ( %)"],
+                      text: props.data["Flickering                   ( %)"]+"",
                       size: contentFontSize,
                       font: contentFont,
                     }),
@@ -1558,7 +1564,7 @@ const DatasheetTemplate = (props) => {
                 new Paragraph ({
                   children: [
                     new TextRun({
-                      text: props.data["Norminal Life (h) \r\nas L**B** lifetime"],
+                      text: props.data["Norminal Life (h) \r\nas L**B** lifetime"]+"",
                       size: contentFontSize,
                       font: contentFont,
                     }),
@@ -1712,7 +1718,7 @@ const DatasheetTemplate = (props) => {
                 new Paragraph ({
                   children: [
                     new TextRun({
-                      text: props.data["Glow-wire (℃）"],
+                      text: props.data["Glow-wire (℃）"]+"",
                       size: contentFontSize,
                       font: contentFont,
                     }),
@@ -3116,7 +3122,7 @@ const DatasheetTemplate = (props) => {
       
         Packer.toBlob(doc).then(blob => {
           console.log(blob);
-          saveAs(blob, "example.docx");
+          saveAs(blob, props.data["Customer Model No.                (NEW ErP)"]+"_"+productCode+".docx");
           console.log("Document created successfully");
         });
       };
